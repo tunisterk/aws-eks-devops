@@ -2,7 +2,7 @@
 
 services:
   ui:
-    image: public.ecr.aws/aws-containers/retail-store-sample-ui
+    image: public.ecr.aws/aws-containers/retail-store-sample-ui:0.8.0
     ports:
       - "8888:8080"
     environment:
@@ -62,8 +62,8 @@ services:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
-      retries: 3
-      start_period: 10s    
+      retries: 5
+      start_period: 120s    
     networks:
       - app-network
     volumes:
@@ -76,6 +76,9 @@ services:
       - RETAIL_CART_PERSISTENCE_PROVIDER=dynamodb
       - RETAIL_CART_PERSISTENCE_DYNAMODB_ENDPOINT=http://carts-db:8000
       - RETAIL_CART_PERSISTENCE_DYNAMODB_CREATE_TABLE=true
+      - AWS_ACCESS_KEY_ID=dummy
+      - AWS_SECRET_ACCESS_KEY=dummy
+      - AWS_REGION=us-east-1
     depends_on:
       carts-db:
         condition: service_started
@@ -139,7 +142,7 @@ services:
       - POSTGRES_USER=orders_user
       - POSTGRES_PASSWORD=testing
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "orders_user"]
+      test: ["CMD", "pg_isready", "-U", "orders_user", "-d", "orders"]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -170,17 +173,18 @@ services:
       - RETAIL_CHECKOUT_ENDPOINTS_ORDERS=http://orders:8080
       - RETAIL_CHECKOUT_PERSISTENCE_REDIS_URL=redis://checkout-db:6379
     healthcheck:
-      test: ["CMD", "node", "/healthcheck.js"]     
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 10s
       timeout: 5s
-      retries: 5
-      start_period: 30s 
+      retries: 3
+      start_period: 15s
     depends_on:
       checkout-db:
         condition: service_healthy
     networks:
       - app-network
-  
+   
+
   checkout-db:
     image: redis:latest
     healthcheck:
