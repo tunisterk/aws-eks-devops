@@ -1,0 +1,41 @@
+apiVersion: apps/v1        # always this for Deployments
+kind: Deployment           # what we're creating
+metadata:
+  name: catalog            # name of the deployment
+  labels:
+    app: catalog           # label to identify it
+spec:
+  replicas: 1              # how many pods to run
+  selector:
+    matchLabels:
+      app: catalog         # must match template labels below
+  template:
+    metadata:
+      labels:
+        app: catalog       # label on the pod
+    spec:
+      containers:
+        - name: catalog
+          image: public.ecr.aws/aws-containers/retail-store-sample-catalog:1.6.1
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PORT
+              value: "8080"
+            - name: RETAIL_CATALOG_PERSISTENCE_PROVIDER
+              value: "mysql"
+            - name: RETAIL_CATALOG_PERSISTENCE_ENDPOINT
+              value: "catalog-db:3306"
+            - name: RETAIL_CATALOG_PERSISTENCE_DB_NAME
+              value: "catalogdb"
+            - name: RETAIL_CATALOG_PERSISTENCE_USER
+              value: "catalog_user"
+            - name: RETAIL_CATALOG_PERSISTENCE_PASSWORD
+              value: "password123"
+          resources:
+            requests:
+              cpu: "128m"
+              memory: "128Mi"
+            limits:
+              cpu: "256m"
+              memory: "256Mi"

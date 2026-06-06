@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-db
+  labels:
+    app: catalog-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalog-db
+  template:
+    metadata:
+      labels:
+        app: catalog-db
+    spec:
+      containers:
+        - name: catalog-db
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "rootpassword"
+            - name: MYSQL_DATABASE
+              value: "catalogdb"
+            - name: MYSQL_USER
+              value: "catalog_user"
+            - name: MYSQL_PASSWORD
+              value: "password123"
+          resources:
+            requests:
+              cpu: "128m"
+              memory: "256Mi"
+            limits:
+              cpu: "256m"
+              memory: "512Mi"
