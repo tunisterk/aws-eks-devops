@@ -4,8 +4,8 @@ metadata:
   name: catalog
 spec:
   selector:
-    app: catalog         # finds pods with this label
+    app: catalog         
   ports:
-    - port: 8080         # service port
-      targetPort: 8080   # pod port
-  type: ClusterIP        # only accessible inside cluster
+    - port: 8080         
+      targetPort: 8080   
+  type: ClusterIP        
