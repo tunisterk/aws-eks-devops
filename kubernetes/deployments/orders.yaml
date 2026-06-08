@@ -27,7 +27,7 @@ spec:
         env: 
           - name: PORT
             value: "8080"
-          - name: RETAIL_ORDERS_PERSISTENCE_PROVIDER
+          - name: RETAIL_CHECKOUT_PERSISTENCE_PROVIDER
             value: "postgres"
           - name: RETAIL_ORDERS_PERSISTENCE_ENDPOINT
             value: "orders-db:5432"
@@ -38,8 +38,4 @@ spec:
           - name: RETAIL_ORDERS_PERSISTENCE_PASSWORD
             value: "testing"
           - name: RETAIL_ORDERS_MESSAGING_PROVIDER
-            value: "sqs"
-          - name: RETAIL_ORDERS_MESSAGING_SQS_TOPIC
-            value: "REPLACE_WITH_SQS_QUEUE_NAME"
-          - name: RETAIL_ORDERS_PERSISTENCE_ENDPOINT
-            value: "REPLACE_WITH_RDS_ENDPOINT"
+            value: "in-memory"

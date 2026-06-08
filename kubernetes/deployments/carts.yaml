@@ -13,29 +13,33 @@ spec:
         app: carts
     spec:
       containers:
-      - name: carts
-        image: public.ecr.aws/aws-containers/retail-store-sample-cart:1.6.1
-        ports: 
-          - containerPort: 8080
-        resources:
-          requests:
-            cpu: "500m"
-            memory: "256Mi"
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
-        env:
-          - name: PORT
-            value: "8080"
-          - name: RETAIL_CART_PERSISTENCE_PROVIDER
-            value: "dynamodb"
-          - name: RETAIL_CART_PERSISTENCE_DYNAMODB_ENDPOINT
-            value: "REPLACE_WITH_DYNAMODB_ENDPOINT"
-          - name: RETAIL_CART_PERSISTENCE_DYNAMODB_CREATE_TABLE
-            value: "true"
-          - name: AWS_ACCESS_KEY_ID
-            value: "REPLACE_WITH_AWS_ACCESS_KEY"
-          - name: AWS_SECRET_ACCESS_KEY
-            value: "REPLACE_WITH_AWS_SECRET_KEY"
-          - name: AWS_REGION
-            value: "eu-central-1"
+        - name: carts
+          image: public.ecr.aws/aws-containers/retail-store-sample-cart:1.6.1
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "128m"
+              memory: "256Mi"
+            limits:
+              memory: "521Mi"
+              cpu: "500m"
+          env:
+            - name: PORT
+              value: "8080"
+            - name: RETAIL_CART_PERSISTENCE_PROVIDER
+              value: "dynamodb"
+            - name: RETAIL_CART_PERSISTENCE_DYNAMODB_CREATE_TABLE
+              value: "true"
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws-credentials
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-credentials
+                  key: AWS_SECRET_ACCESS_KEY
+            - name: AWS_REGION
+              value: "eu-central-1"
